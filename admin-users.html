@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SmartCrop AI - User Management</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            background: #f4f8f3;
+            color: #26352a;
+        }
+
+        /* ================= HEADER ================= */
+
+        header {
+            background: #ffffff;
+            border-bottom: 1px solid #dce8dc;
+            padding: 16px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #237a3b;
+        }
+
+        .logo span {
+            color: #65a30d;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .admin-badge {
+            background: #fff4c2;
+            color: #765700;
+            border: 1px solid #efd46b;
+            padding: 8px 13px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .back-button {
+            text-decoration: none;
+            background: #237a3b;
+            color: white;
+            padding: 9px 15px;
+            border-radius: 9px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .back-button:hover {
+            background: #195d2d;
+        }
+
+        /* ================= PAGE ================= */
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 35px auto;
+        }
+
+        .page-title {
+            margin-bottom: 25px;
+        }
+
+        .page-title h1 {
+            font-size: 30px;
+            color: #205c2d;
+            margin-bottom: 8px;
+        }
+
+        .page-title p {
+            color: #64736a;
+            font-size: 15px;
+        }
+
+        /* ================= CARDS ================= */
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.06);
+            border: 1px solid #e1ebe1;
+            margin-bottom: 25px;
+        }
+
+        .card h2 {
+            color: #286b38;
+            margin-bottom: 20px;
+            font-size: 21px;
+        }
+
+        /* ================= FORM ================= */
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 7px;
+            color: #3d4d42;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 13px;
+            border: 1px solid #ccd9ce;
+            border-radius: 9px;
+            outline: none;
+            font-size: 15px;
+            background: #fbfdfb;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #4b9b5b;
+            box-shadow: 0 0 0 3px rgba(75, 155, 91, 0.1);
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        .create-button {
+            margin-top: 20px;
+            background: #237a3b;
+            color: white;
+            border: none;
+            padding: 12px 22px;
+            border-radius: 9px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .create-button:hover {
+            background: #195d2d;
+        }
+
+        .create-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* ================= MESSAGE ================= */
+
+        #message {
+            margin-top: 15px;
+            padding: 12px 14px;
+            border-radius: 8px;
+            display: none;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .success {
+            background: #e8f7e9;
+            color: #216b2e;
+            border: 1px solid #b8dfbd;
+        }
+
+        .error {
+            background: #fdeaea;
+            color: #a52929;
+            border: 1px solid #efb8b8;
+        }
+
+        /* ================= USERS TABLE ================= */
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 650px;
+        }
+
+        th,
+        td {
+            padding: 13px 12px;
+            border-bottom: 1px solid #e5ece5;
+            text-align: left;
+            font-size: 14px;
+        }
+
+        th {
+            background: #f2f7f2;
+            color: #315f3a;
+            font-weight: bold;
+        }
+
+        tr:hover td {
+            background: #fafdf9;
+        }
+
+        .role-admin {
+            display: inline-block;
+            background: #fff2bd;
+            color: #765700;
+            padding: 5px 9px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .role-user {
+            display: inline-block;
+            background: #e6f5e8;
+            color: #27713a;
+            padding: 5px 9px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 25px;
+            color: #718078;
+        }
+
+        .refresh-button {
+            float: right;
+            background: #eef6ee;
+            color: #286b38;
+            border: 1px solid #cfe1d0;
+            padding: 8px 13px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .refresh-button:hover {
+            background: #dfeee0;
+        }
+
+        .clearfix::after {
+            content: "";
+            display: block;
+            clear: both;
+        }
+
+        /* ================= FOOTER ================= */
+
+        footer {
+            text-align: center;
+            padding: 25px 10px;
+            color: #728077;
+            font-size: 13px;
+        }
+
+        /* ================= MOBILE ================= */
+
+        @media (max-width: 700px) {
+
+            header {
+                padding: 14px 4%;
+            }
+
+            .logo {
+                font-size: 20px;
+            }
+
+            .header-right {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .container {
+                width: 94%;
+                margin-top: 25px;
+            }
+
+            .page-title h1 {
+                font-size: 25px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .full-width {
+                grid-column: auto;
+            }
+
+            .card {
+                padding: 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ================= HEADER ================= -->
+
+    <header>
+
+        <div class="logo">
+            🌱 SmartCrop <span>AI</span>
+        </div>
+
+        <div class="header-right">
+
+            <div class="admin-badge">
+                👑 Administrator
+            </div>
+
+            <a href="index.html" class="back-button">
+                ← Dashboard
+            </a>
+
+        </div>
+
+    </header>
+
+
+    <!-- ================= MAIN ================= -->
+
+    <main class="container">
+
+        <div class="page-title">
+
+            <h1>👥 User Management</h1>
+
+            <p>
+                Create and manage SmartCrop AI administrator and farmer accounts.
+            </p>
+
+        </div>
+
+
+        <!-- ================= CREATE USER ================= -->
+
+        <div class="card">
+
+            <h2>➕ Create New User</h2>
+
+            <form id="createUserForm">
+
+                <div class="form-grid">
+
+                    <div class="form-group">
+                        <label for="name">
+                            Full Name
+                        </label>
+
+                        <input
+                            type="text"
+                            id="name"
+                            placeholder="Enter full name"
+                            required
+                        >
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="username">
+                            Username
+                        </label>
+
+                        <input
+                            type="text"
+                            id="username"
+                            placeholder="Enter username"
+                            required
+                        >
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="password">
+                            Password
+                        </label>
+
+                        <input
+                            type="password"
+                            id="password"
+                            placeholder="Enter password"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="role">
+                            User Role
+                        </label>
+
+                        <select id="role" required>
+
+                            <option value="user">
+                                👨‍🌾 Farmer / User
+                            </option>
+
+                            <option value="admin">
+                                👑 Administrator
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="create-button"
+                    id="createButton"
+                >
+                    ➕ Create User
+                </button>
+
+
+                <div id="message"></div>
+
+            </form>
+
+        </div>
+
+
+        <!-- ================= USERS LIST ================= -->
+
+        <div class="card">
+
+            <div class="clearfix">
+
+                <h2 style="display:inline-block;">
+                    📋 Registered Users
+                </h2>
+
+                <button
+                    class="refresh-button"
+                    onclick="loadUsers()"
+                >
+                    🔄 Refresh
+                </button>
+
+            </div>
+
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>ID</th>
+
+                            <th>Name</th>
+
+                            <th>Username</th>
+
+                            <th>Role</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="usersTableBody">
+
+                        <tr>
+
+                            <td
+                                colspan="4"
+                                class="loading"
+                            >
+                                Loading users...
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <!-- ================= FOOTER ================= -->
+
+    <footer>
+
+        <div>
+            SmartCrop AI — IoT & AI Based Smart Agriculture System
+        </div>
+
+        <div style="margin-top:6px;">
+            Website Developed by Prasad Salwe
+        </div>
+
+    </footer>
+
+
+    <!-- ================= JAVASCRIPT ================= -->
+
+    <script>
+
+        const API_BASE = "http://127.0.0.1:5000";
+
+
+        /* =========================================
+           CHECK ADMIN LOGIN
+        ========================================= */
+
+        const storedUser = localStorage.getItem("smartcrop_user");
+        const storedRole = localStorage.getItem("smartcrop_role");
+        const storedUsername = localStorage.getItem("smartcrop_username");
+
+
+        if (!storedUser) {
+
+            window.location.href = "login.html";
+
+        }
+
+
+        let currentUser = null;
+
+        try {
+
+            currentUser = JSON.parse(storedUser);
+
+        } catch (error) {
+
+            console.error("User data error:", error);
+
+        }
+
+
+        /*
+         * Only ADMIN can access this page.
+         */
+
+        if (
+            !currentUser ||
+            currentUser.role !== "admin"
+        ) {
+
+            window.location.href = "index.html";
+
+        }
+
+
+        /* =========================================
+           CREATE USER
+        ========================================= */
+
+        document
+            .getElementById("createUserForm")
+            .addEventListener("submit", async function(event) {
+
+                event.preventDefault();
+
+
+                const name =
+                    document
+                        .getElementById("name")
+                        .value
+                        .trim();
+
+
+                const username =
+                    document
+                        .getElementById("username")
+                        .value
+                        .trim();
+
+
+                const password =
+                    document
+                        .getElementById("password")
+                        .value;
+
+
+                const role =
+                    document
+                        .getElementById("role")
+                        .value;
+
+
+                const message =
+                    document.getElementById("message");
+
+
+                const createButton =
+                    document.getElementById("createButton");
+
+
+                if (!name || !username || !password) {
+
+                    showMessage(
+                        "Please fill all required fields.",
+                        "error"
+                    );
+
+                    return;
+
+                }
+
+
+                createButton.disabled = true;
+
+                createButton.innerText = "⏳ Creating...";
+
+
+                try {
+
+                    const response = await fetch(
+                        `${API_BASE}/api/users/create`,
+                        {
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+
+                            body: JSON.stringify({
+
+                                admin_username:
+                                    currentUser.username ||
+                                    storedUsername,
+
+                                name: name,
+
+                                username: username,
+
+                                password: password,
+
+                                role: role
+
+                            })
+
+                        }
+                    );
+
+
+                    const data =
+                        await response.json();
+
+
+                    if (!response.ok) {
+
+                        throw new Error(
+                            data.message ||
+                            "Unable to create user."
+                        );
+
+                    }
+
+
+                    showMessage(
+                        data.message ||
+                        "User created successfully!",
+                        "success"
+                    );
+
+
+                    document
+                        .getElementById("createUserForm")
+                        .reset();
+
+
+                    /*
+                     * Reload users after successful creation.
+                     */
+
+                    loadUsers();
+
+
+                } catch (error) {
+
+                    console.error(
+                        "Create user error:",
+                        error
+                    );
+
+
+                    showMessage(
+                        error.message ||
+                        "Unable to connect to backend.",
+                        "error"
+                    );
+
+                } finally {
+
+                    createButton.disabled = false;
+
+                    createButton.innerText =
+                        "➕ Create User";
+
+                }
+
+            });
+
+
+        /* =========================================
+           SHOW MESSAGE
+        ========================================= */
+
+        function showMessage(text, type) {
+
+            const message =
+                document.getElementById("message");
+
+
+            message.innerText = text;
+
+            message.className = type;
+
+            message.style.display = "block";
+
+
+            setTimeout(function() {
+
+                message.style.display = "none";
+
+            }, 5000);
+
+        }
+
+
+        /* =========================================
+           LOAD USERS
+        ========================================= */
+
+        async function loadUsers() {
+
+            const tableBody =
+                document.getElementById(
+                    "usersTableBody"
+                );
+
+
+            tableBody.innerHTML = `
+
+                <tr>
+
+                    <td
+                        colspan="4"
+                        class="loading"
+                    >
+                        ⏳ Loading users...
+                    </td>
+
+                </tr>
+
+            `;
+
+
+            try {
+
+                const adminUsername =
+                    currentUser.username ||
+                    storedUsername;
+
+
+                const response = await fetch(
+                    `${API_BASE}/api/users?admin_username=${encodeURIComponent(adminUsername)}`
+                );
+
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        data.message ||
+                        "Unable to load users."
+                    );
+
+                }
+
+
+                const users =
+                    data.users || [];
+
+
+                if (users.length === 0) {
+
+                    tableBody.innerHTML = `
+
+                        <tr>
+
+                            <td
+                                colspan="4"
+                                class="loading"
+                            >
+                                No users found.
+                            </td>
+
+                        </tr>
+
+                    `;
+
+                    return;
+
+                }
+
+
+                tableBody.innerHTML = "";
+
+
+                users.forEach(function(user) {
+
+                    const row =
+                        document.createElement("tr");
+
+
+                    let roleHTML = "";
+
+
+                    if (user.role === "admin") {
+
+                        roleHTML = `
+                            <span class="role-admin">
+                                👑 Administrator
+                            </span>
+                        `;
+
+                    } else {
+
+                        roleHTML = `
+                            <span class="role-user">
+                                👨‍🌾 Farmer / User
+                            </span>
+                        `;
+
+                    }
+
+
+                    row.innerHTML = `
+
+                        <td>
+                            ${escapeHTML(user.id)}
+                        </td>
+
+                        <td>
+                            ${escapeHTML(user.name || "-")}
+                        </td>
+
+                        <td>
+                            ${escapeHTML(user.username)}
+                        </td>
+
+                        <td>
+                            ${roleHTML}
+                        </td>
+
+                    `;
+
+
+                    tableBody.appendChild(row);
+
+                });
+
+
+            } catch (error) {
+
+                console.error(
+                    "Load users error:",
+                    error
+                );
+
+
+                tableBody.innerHTML = `
+
+                    <tr>
+
+                        <td
+                            colspan="4"
+                            class="loading"
+                        >
+                            ❌ ${escapeHTML(
+                                error.message ||
+                                "Unable to load users."
+                            )}
+                        </td>
+
+                    </tr>
+
+                `;
+
+            }
+
+        }
+
+
+        /* =========================================
+           HTML ESCAPE
+        ========================================= */
+
+        function escapeHTML(value) {
+
+            if (value === null ||
+                value === undefined) {
+
+                return "";
+
+            }
+
+
+            return String(value)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+
+        }
+
+
+        /* =========================================
+           INITIAL LOAD
+        ========================================= */
+
+        loadUsers();
+
+    </script>
+
+</body>
+</html>

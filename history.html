@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Detection History - SmartCrop AI</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+
+        .history-page {
+            width: 90%;
+            max-width: 1100px;
+            margin: 40px auto 80px;
+        }
+
+        .history-status {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #64748b;
+        }
+
+        .history-summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            margin-bottom: 30px;
+        }
+
+        .summary-card {
+            background: white;
+            border: 1px solid #dce9df;
+            border-radius: 18px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(0, 80, 30, 0.06);
+        }
+
+        .summary-card h2 {
+            margin: 8px 0;
+        }
+
+        .record {
+            border: 1px solid #dce9df;
+            border-radius: 16px;
+            padding: 20px;
+            margin-top: 16px;
+            background: #f8fff9;
+        }
+
+        .record-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .healthy {
+            color: #15803d;
+        }
+
+        .diseased {
+            color: #dc2626;
+        }
+
+        .spray-yes {
+            color: #dc2626;
+            font-weight: bold;
+        }
+
+        .spray-no {
+            color: #15803d;
+            font-weight: bold;
+        }
+
+        @media (max-width: 700px) {
+
+            .history-summary {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <nav>
+
+        <div class="logo">
+            🌱 SmartCrop AI
+        </div>
+
+        <div class="nav-links">
+
+            <a href="index.html">Home</a>
+
+            <a href="scanner.html">Crop Scanner</a>
+
+            <a href="iot.html">IoT Monitoring</a>
+
+            <a href="spraying.html">Spraying</a>
+
+            <a href="analytics.html">Analytics</a>
+
+            <a href="history.html">History</a>
+
+            <a href="farmer-copilot.html">Farmer Copilot</a>
+
+        </div>
+
+    </nav>
+
+
+    <section class="hero">
+
+        <h1>📋 Detection History</h1>
+
+        <p>
+            Real-time crop health detection records
+            from the SmartCrop AI database.
+        </p>
+
+    </section>
+
+
+    <main class="history-page">
+
+
+        <div
+            class="history-status"
+            id="historyStatus"
+        >
+            🔄 Loading detection records...
+        </div>
+
+
+        <section class="history-summary">
+
+
+            <div class="summary-card">
+
+                <div>🌱</div>
+
+                <h2 id="totalRecords">
+                    --
+                </h2>
+
+                <p>Total Scans</p>
+
+            </div>
+
+
+            <div class="summary-card">
+
+                <div>🟢</div>
+
+                <h2 id="healthyRecords">
+                    --
+                </h2>
+
+                <p>Healthy</p>
+
+            </div>
+
+
+            <div class="summary-card">
+
+                <div>🔴</div>
+
+                <h2 id="diseasedRecords">
+                    --
+                </h2>
+
+                <p>Diseased / Defected</p>
+
+            </div>
+
+
+        </section>
+
+
+        <section class="card">
+
+            <h2>🌱 Recent Crop Scans</h2>
+
+            <div id="history">
+
+                <p>
+                    🔄 Loading...
+                </p>
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+
+    <script>
+
+
+        async function loadHistory() {
+
+
+            try {
+
+
+                const response = await fetch(
+                    "http://127.0.0.1:5000/api/detections"
+                );
+
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Unable to load detection records"
+                    );
+
+                }
+
+
+                const history =
+                    document.getElementById(
+                        "history"
+                    );
+
+
+                const total =
+                    data.length;
+
+
+                const healthy =
+                    data.filter(
+                        item =>
+                            item.result === "Healthy"
+                    ).length;
+
+
+                const diseased =
+                    data.filter(
+                        item =>
+                            item.result ===
+                            "Diseased / Defected"
+                    ).length;
+
+
+                document.getElementById(
+                    "totalRecords"
+                ).innerText = total;
+
+
+                document.getElementById(
+                    "healthyRecords"
+                ).innerText = healthy;
+
+
+                document.getElementById(
+                    "diseasedRecords"
+                ).innerText = diseased;
+
+
+                if (total === 0) {
+
+                    history.innerHTML = `
+
+                        <p>
+                            No detection records found yet.
+                        </p>
+
+                    `;
+
+                    document.getElementById(
+                        "historyStatus"
+                    ).innerText =
+                        "ℹ️ No crop scans available";
+
+                    return;
+
+                }
+
+
+                history.innerHTML = "";
+
+
+                data.forEach(function(item) {
+
+
+                    const isHealthy =
+                        item.result === "Healthy";
+
+
+                    const record =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    record.className =
+                        "record";
+
+
+                    record.innerHTML = `
+
+                        <div class="record-top">
+
+                            <h3 class="${
+                                isHealthy
+                                    ? "healthy"
+                                    : "diseased"
+                            }">
+
+                                ${
+                                    isHealthy
+                                        ? "🟢"
+                                        : "🔴"
+                                }
+
+                                Plant ID:
+                                ${item.plant_id}
+
+                            </h3>
+
+                            <strong>
+                                ${item.confidence}%
+                            </strong>
+
+                        </div>
+
+
+                        <p>
+
+                            <b>AI Result:</b>
+
+                            ${item.result}
+
+                        </p>
+
+
+                        <p>
+
+                            <b>AI Confidence:</b>
+
+                            ${item.confidence}%
+
+                        </p>
+
+
+                        <p>
+
+                            <b>Spray Required:</b>
+
+                            ${
+                                item.spray_required === "Yes"
+
+                                ? `<span class="spray-yes">
+                                    ✅ Yes
+                                   </span>`
+
+                                : `<span class="spray-no">
+                                    ❌ No
+                                   </span>`
+                            }
+
+                        </p>
+
+
+                        <p>
+
+                            <b>Detection Time:</b>
+
+                            ${item.created_at || "Not available"}
+
+                        </p>
+
+                    `;
+
+
+                    history.appendChild(
+                        record
+                    );
+
+
+                });
+
+
+                document.getElementById(
+                    "historyStatus"
+                ).innerText =
+                    "🟢 Live detection history loaded";
+
+
+            }
+
+
+            catch (error) {
+
+
+                console.error(
+                    "History error:",
+                    error
+                );
+
+
+                document.getElementById(
+                    "history"
+                ).innerHTML = `
+
+                    <p style="color:red;">
+                        ⚠️ Unable to connect to SmartCrop AI backend.
+                    </p>
+
+                `;
+
+
+                document.getElementById(
+                    "historyStatus"
+                ).innerText =
+                    "🔴 Backend connection failed";
+
+
+            }
+
+        }
+
+
+        loadHistory();
+
+
+        // Automatically refresh every 5 seconds
+
+        setInterval(
+            loadHistory,
+            5000
+        );
+
+
+    </script>
+
+
+</body>
+
+</html>

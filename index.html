@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>SmartCrop AI</title>
+
+    <link rel="stylesheet"
+          href="style.css">
+
+
+    <style>
+
+        .home-hero {
+            min-height: 520px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .home-content {
+            max-width: 850px;
+        }
+
+        .home-badge {
+            display: inline-block;
+            padding: 8px 14px;
+            border-radius: 20px;
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            color: #166534;
+            font-weight: bold;
+            margin-bottom: 18px;
+        }
+
+        .home-content h1 {
+            font-size: 56px;
+            margin: 10px 0;
+            color: #14532d;
+        }
+
+        .home-content h2 {
+            font-size: 28px;
+            margin: 15px 0;
+            color: #166534;
+        }
+
+        .home-content p {
+            max-width: 700px;
+            margin: 0 auto 28px;
+            color: #64748b;
+            font-size: 17px;
+            line-height: 1.7;
+        }
+
+        .home-actions {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .secondary-button {
+            display: inline-block;
+            padding: 12px 20px;
+            border-radius: 12px;
+            text-decoration: none;
+            background: white;
+            color: #166534;
+            border: 1px solid #bbf7d0;
+            font-weight: bold;
+        }
+
+        .secondary-button:hover {
+            background: #f0fdf4;
+        }
+
+        .quick-section {
+            width: 90%;
+            max-width: 1100px;
+            margin: 0 auto 70px;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .section-title h2 {
+            color: #14532d;
+            margin-bottom: 8px;
+        }
+
+        .section-title p {
+            color: #64748b;
+        }
+
+        .quick-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .quick-card {
+            background: white;
+            border: 1px solid #dce9df;
+            border-radius: 20px;
+            padding: 28px;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(0, 80, 30, 0.06);
+        }
+
+        .quick-icon {
+            font-size: 42px;
+            margin-bottom: 10px;
+        }
+
+        .quick-card h3 {
+            color: #14532d;
+        }
+
+        .quick-card p {
+            color: #64748b;
+            line-height: 1.6;
+        }
+
+        .status-panel {
+            width: 90%;
+            max-width: 900px;
+            margin: 0 auto 70px;
+            background: white;
+            border: 1px solid #dce9df;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(0, 80, 30, 0.06);
+        }
+
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .status-item {
+            text-align: center;
+            padding: 16px;
+            background: #f8fff9;
+            border-radius: 14px;
+        }
+
+        .status-item h3 {
+            margin: 8px 0;
+            color: #14532d;
+        }
+
+        .status-item p {
+            margin: 0;
+            color: #166534;
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+
+        /* ================================
+           USER INFO
+        ================================= */
+
+        .user-panel {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 12px;
+            padding: 10px 5%;
+            background: #f8fff9;
+            border-bottom: 1px solid #dce9df;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #14532d;
+            font-size: 14px;
+        }
+
+        .user-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: #dcfce7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .user-name {
+            font-weight: bold;
+        }
+
+        .user-role {
+            color: #64748b;
+            font-size: 12px;
+        }
+
+        .logout-button {
+            border: none;
+            padding: 9px 15px;
+            border-radius: 10px;
+            background: #fee2e2;
+            color: #b91c1c;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .logout-button:hover {
+            background: #fecaca;
+        }
+
+
+        /* ================================
+           ADMIN USER MANAGEMENT BUTTON
+        ================================= */
+
+        .admin-users-button {
+            display: none;
+            padding: 9px 15px;
+            border-radius: 10px;
+            background: #fff7d6;
+            color: #805900;
+            border: 1px solid #f3d36a;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .admin-users-button:hover {
+            background: #ffefb0;
+        }
+
+
+        @media (max-width: 900px) {
+
+            .quick-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .status-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .home-content h1 {
+                font-size: 42px;
+            }
+
+            .user-panel {
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+
+        }
+
+
+        @media (max-width: 600px) {
+
+            .status-grid {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- ================================
+         NAVIGATION
+    ================================= -->
+
+    <nav>
+
+        <div class="logo">
+            🌱 SmartCrop AI
+        </div>
+
+
+        <div class="nav-links">
+
+            <a href="index.html">
+                Home
+            </a>
+
+            <a href="scanner.html">
+                Crop Scanner
+            </a>
+
+            <a href="iot.html">
+                IoT Monitoring
+            </a>
+
+            <a href="spraying.html">
+                Spraying
+            </a>
+
+            <a href="analytics.html">
+                Analytics
+            </a>
+
+            <a href="history.html">
+                History
+            </a>
+
+            <a href="farmer-copilot.html">
+                Farmer Copilot
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <!-- ================================
+         LOGGED-IN USER PANEL
+    ================================= -->
+
+    <div class="user-panel">
+
+
+        <div class="user-info">
+
+            <div class="user-avatar"
+                 id="userAvatar">
+                👤
+            </div>
+
+
+            <div>
+
+                <div
+                    class="user-name"
+                    id="userName"
+                >
+                    Loading...
+                </div>
+
+
+                <div
+                    class="user-role"
+                    id="userRole"
+                >
+                    Checking account...
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ADMIN ONLY -->
+
+        <a
+            href="admin-users.html"
+            id="adminUsersLink"
+            class="admin-users-button"
+        >
+            👥 User Management
+        </a>
+
+
+        <button
+            class="logout-button"
+            onclick="logoutUser()"
+        >
+            🚪 Logout
+        </button>
+
+    </div>
+
+
+    <!-- ================================
+         HERO SECTION
+    ================================= -->
+
+    <section class="home-hero">
+
+        <div class="home-content">
+
+
+            <div class="home-badge">
+                🌱 AI + IoT Smart Agriculture
+            </div>
+
+
+            <h1>
+                SmartCrop AI
+            </h1>
+
+
+            <h2>
+                Intelligent Crop Health Detection
+                & Targeted Spraying
+            </h2>
+
+
+            <p>
+                A smart agriculture system that combines
+                AI-based crop health detection, IoT monitoring
+                and targeted spraying to identify affected
+                plants and support efficient crop management.
+            </p>
+
+
+            <div class="home-actions">
+
+                <a
+                    href="scanner.html"
+                    class="button"
+                >
+                    📷 Scan Crop
+                </a>
+
+
+                <a
+                    href="farmer-copilot.html"
+                    class="secondary-button"
+                >
+                    🤖 Farmer Copilot
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================================
+         SMART AGRICULTURE TOOLS
+    ================================= -->
+
+    <section class="quick-section">
+
+
+        <div class="section-title">
+
+            <h2>
+                🌾 Smart Agriculture Tools
+            </h2>
+
+            <p>
+                Access the main SmartCrop AI modules.
+            </p>
+
+        </div>
+
+
+        <div class="quick-cards">
+
+
+            <!-- Scanner -->
+
+            <div class="quick-card">
+
+                <div class="quick-icon">
+                    🤖
+                </div>
+
+                <h3>
+                    AI Crop Scanner
+                </h3>
+
+                <p>
+                    Upload a crop image and let SmartCrop AI
+                    check whether the plant is healthy or
+                    diseased.
+                </p>
+
+                <a
+                    href="scanner.html"
+                    class="secondary-button"
+                >
+                    Open Scanner
+                </a>
+
+            </div>
+
+
+            <!-- IoT -->
+
+            <div class="quick-card">
+
+                <div class="quick-icon">
+                    📡
+                </div>
+
+                <h3>
+                    IoT Monitoring
+                </h3>
+
+                <p>
+                    Monitor field conditions, machine status
+                    and connected agriculture parameters.
+                </p>
+
+                <a
+                    href="iot.html"
+                    class="secondary-button"
+                >
+                    View IoT
+                </a>
+
+            </div>
+
+
+            <!-- Spraying -->
+
+            <div class="quick-card">
+
+                <div class="quick-icon">
+                    🎯
+                </div>
+
+                <h3>
+                    Targeted Spraying
+                </h3>
+
+                <p>
+                    Identify affected plants and manage
+                    targeted spraying operations.
+                </p>
+
+                <a
+                    href="spraying.html"
+                    class="secondary-button"
+                >
+                    View Spraying
+                </a>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+    <!-- ================================
+         LIVE SUMMARY
+    ================================= -->
+
+    <section class="status-panel">
+
+
+        <div class="section-title">
+
+            <h2>
+                📊 SmartCrop Summary
+            </h2>
+
+            <p id="summaryStatus">
+                Loading latest system data...
+            </p>
+
+        </div>
+
+
+        <div class="status-grid">
+
+
+            <div class="status-item">
+
+                <div>
+                    🌱
+                </div>
+
+                <h3>
+                    Scanned
+                </h3>
+
+                <p id="totalScanned">
+                    --
+                </p>
+
+            </div>
+
+
+            <div class="status-item">
+
+                <div>
+                    🟢
+                </div>
+
+                <h3>
+                    Healthy
+                </h3>
+
+                <p id="healthyPlants">
+                    --
+                </p>
+
+            </div>
+
+
+            <div class="status-item">
+
+                <div>
+                    🔴
+                </div>
+
+                <h3>
+                    Diseased
+                </h3>
+
+                <p id="diseasedPlants">
+                    --
+                </p>
+
+            </div>
+
+
+            <div class="status-item">
+
+                <div>
+                    💦
+                </div>
+
+                <h3>
+                    Spray
+                </h3>
+
+                <p id="sprayOperations">
+                    --
+                </p>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+    <!-- ================================
+         FOOTER
+    ================================= -->
+
+    <footer style="
+        margin-top: 30px;
+        padding: 32px 20px;
+        text-align: center;
+        background: white;
+        border-top: 1px solid #dce9df;
+        box-shadow: 0 -3px 15px rgba(0, 80, 30, 0.06);
+    ">
+
+
+        <p style="
+            margin: 0;
+            color: #14532d;
+            font-size: 18px;
+            font-weight: bold;
+        ">
+            🌱 SmartCrop AI
+        </p>
+
+
+        <p style="
+            margin: 8px 0;
+            color: #166534;
+            font-size: 16px;
+            font-weight: bold;
+        ">
+            Website Developed by Prasad Salwe
+        </p>
+
+
+        <p style="
+            margin: 8px 0;
+            color: #64748b;
+            font-size: 15px;
+        ">
+            📞 Contact: 7558560601
+        </p>
+
+
+        <p style="
+            margin: 8px 0 0;
+            color: #64748b;
+            font-size: 14px;
+        ">
+            AI-Based Crop Health Detection and
+            Targeted Spraying System
+        </p>
+
+
+        <p style="
+            margin: 12px 0 0;
+            color: #94a3b8;
+            font-size: 13px;
+        ">
+            © 2026 SmartCrop AI. All rights reserved.
+        </p>
+
+    </footer>
+
+
+    <!-- ================================
+         JAVASCRIPT
+    ================================= -->
+
+    <script>
+
+
+        /* =================================
+           CHECK LOGIN
+        ================================= */
+
+        function checkLogin() {
+
+            const savedUser =
+                localStorage.getItem(
+                    "smartcrop_user"
+                );
+
+
+            if (!savedUser) {
+
+                window.location.href =
+                    "login.html";
+
+                return null;
+
+            }
+
+
+            try {
+
+                const user =
+                    JSON.parse(savedUser);
+
+                return user;
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    "Invalid user session",
+                    error
+                );
+
+
+                localStorage.removeItem(
+                    "smartcrop_user"
+                );
+
+                localStorage.removeItem(
+                    "smartcrop_role"
+                );
+
+                localStorage.removeItem(
+                    "smartcrop_username"
+                );
+
+                localStorage.removeItem(
+                    "smartcrop_user_id"
+                );
+
+
+                window.location.href =
+                    "login.html";
+
+                return null;
+
+            }
+
+        }
+
+
+        /* =================================
+           DISPLAY USER
+        ================================= */
+
+        function displayUser() {
+
+            const user =
+                checkLogin();
+
+
+            if (!user) {
+                return;
+            }
+
+
+            const userName =
+                document.getElementById(
+                    "userName"
+                );
+
+
+            const userRole =
+                document.getElementById(
+                    "userRole"
+                );
+
+
+            const userAvatar =
+                document.getElementById(
+                    "userAvatar"
+                );
+
+
+            const adminUsersLink =
+                document.getElementById(
+                    "adminUsersLink"
+                );
+
+
+            userName.innerText =
+                user.name ||
+                user.username;
+
+
+            if (user.role === "admin") {
+
+                userRole.innerText =
+                    "👑 Administrator";
+
+                userAvatar.innerText =
+                    "👑";
+
+
+                /* =========================
+                   SHOW ADMIN USER MANAGEMENT
+                ========================= */
+
+                if (adminUsersLink) {
+
+                    adminUsersLink.style.display =
+                        "inline-block";
+
+                }
+
+            }
+
+            else {
+
+                userRole.innerText =
+                    "👨‍🌾 Farmer";
+
+                userAvatar.innerText =
+                    "👨‍🌾";
+
+
+                /* =========================
+                   KEEP ADMIN LINK HIDDEN
+                ========================= */
+
+                if (adminUsersLink) {
+
+                    adminUsersLink.style.display =
+                        "none";
+
+                }
+
+            }
+
+        }
+
+
+        /* =================================
+           LOGOUT
+        ================================= */
+
+        function logoutUser() {
+
+            const confirmLogout =
+                confirm(
+                    "Are you sure you want to logout?"
+                );
+
+
+            if (!confirmLogout) {
+                return;
+            }
+
+
+            localStorage.removeItem(
+                "smartcrop_user"
+            );
+
+            localStorage.removeItem(
+                "smartcrop_role"
+            );
+
+            localStorage.removeItem(
+                "smartcrop_username"
+            );
+
+            localStorage.removeItem(
+                "smartcrop_user_id"
+            );
+
+
+            window.location.href =
+                "login.html";
+
+        }
+
+
+        /* =================================
+           LOAD DASHBOARD SUMMARY
+        ================================= */
+
+        async function loadSummary() {
+
+            try {
+
+                const response =
+                    await fetch(
+                        "http://127.0.0.1:5000/api/dashboard"
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Backend unavailable"
+                    );
+
+                }
+
+
+                document.getElementById(
+                    "totalScanned"
+                ).innerText =
+                    data.total_scanned;
+
+
+                document.getElementById(
+                    "healthyPlants"
+                ).innerText =
+                    data.healthy;
+
+
+                document.getElementById(
+                    "diseasedPlants"
+                ).innerText =
+                    data.diseased;
+
+
+                document.getElementById(
+                    "sprayOperations"
+                ).innerText =
+                    data.spray_operations;
+
+
+                document.getElementById(
+                    "summaryStatus"
+                ).innerText =
+                    "🟢 Live data from SmartCrop database";
+
+            }
+
+
+            catch (error) {
+
+                console.error(error);
+
+
+                document.getElementById(
+                    "totalScanned"
+                ).innerText =
+                    "—";
+
+
+                document.getElementById(
+                    "healthyPlants"
+                ).innerText =
+                    "—";
+
+
+                document.getElementById(
+                    "diseasedPlants"
+                ).innerText =
+                    "—";
+
+
+                document.getElementById(
+                    "sprayOperations"
+                ).innerText =
+                    "—";
+
+
+                document.getElementById(
+                    "summaryStatus"
+                ).innerText =
+                    "🔴 Backend connection unavailable";
+
+            }
+
+        }
+
+
+        /* =================================
+           START PAGE
+        ================================= */
+
+        displayUser();
+
+        loadSummary();
+
+
+        /* Refresh live summary every 5 seconds */
+
+        setInterval(
+            loadSummary,
+            5000
+        );
+
+
+    </script>
+
+
+</body>
+
+</html>

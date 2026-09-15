@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Login - SmartCrop AI</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .login-wrapper {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        .login-box {
+            width: 100%;
+            max-width: 430px;
+            background: white;
+            border: 1px solid #dce9df;
+            border-radius: 22px;
+            padding: 35px;
+            box-shadow: 0 12px 35px rgba(0, 80, 30, 0.10);
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .login-logo {
+            font-size: 50px;
+        }
+
+        .login-header h1 {
+            color: #14532d;
+            margin: 10px 0;
+        }
+
+        .login-header p {
+            color: #64748b;
+            line-height: 1.5;
+        }
+
+        .input-group {
+            margin-bottom: 18px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 7px;
+            color: #14532d;
+            font-weight: bold;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 13px 14px;
+            border: 1px solid #cbd5e1;
+            border-radius: 12px;
+            font-size: 15px;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        .input-group input:focus {
+            border-color: #16a34a;
+        }
+
+        .login-button {
+            width: 100%;
+            border: none;
+            padding: 14px;
+            border-radius: 12px;
+            background: #16a34a;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .login-button:hover {
+            background: #15803d;
+        }
+
+        .login-button:disabled {
+            background: #86efac;
+            cursor: not-allowed;
+        }
+
+        .demo-note {
+            margin-top: 18px;
+            padding: 12px;
+            border-radius: 12px;
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            color: #166534;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        #loginMessage {
+            margin-top: 15px;
+            text-align: center;
+            font-weight: bold;
+            min-height: 20px;
+        }
+
+        footer {
+            padding: 25px 20px;
+            text-align: center;
+            background: white;
+            border-top: 1px solid #dce9df;
+        }
+
+        @media (max-width: 500px) {
+
+            .login-box {
+                padding: 25px 20px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <div class="login-wrapper">
+
+        <div class="login-box">
+
+
+            <div class="login-header">
+
+                <div class="login-logo">
+                    🌱
+                </div>
+
+                <h1>
+                    SmartCrop AI
+                </h1>
+
+                <p>
+                    Secure access to your smart agriculture system
+                </p>
+
+            </div>
+
+
+            <form id="loginForm">
+
+
+                <div class="input-group">
+
+                    <label for="username">
+                        Username
+                    </label>
+
+                    <input
+                        type="text"
+                        id="username"
+                        placeholder="Enter username"
+                        autocomplete="username"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="input-group">
+
+                    <label for="password">
+                        Password
+                    </label>
+
+                    <input
+                        type="password"
+                        id="password"
+                        placeholder="Enter password"
+                        autocomplete="current-password"
+                        required
+                    >
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="login-button"
+                    id="loginButton"
+                >
+                    🔐 Login
+                </button>
+
+
+            </form>
+
+
+            <div id="loginMessage"></div>
+
+
+            <div class="demo-note">
+
+                <b>SmartCrop Access</b><br>
+
+                👨‍🌾 Farmer → Farmer crop data and system features<br>
+
+                👑 Admin → Complete system and all users' data
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+    <footer>
+
+        <p style="
+            margin: 0;
+            color: #14532d;
+            font-weight: bold;
+        ">
+            🌱 Website Developed by Prasad Salwe
+        </p>
+
+        <p style="
+            margin: 8px 0 0;
+            color: #64748b;
+            font-size: 14px;
+        ">
+            📞 Contact: 7558560601
+        </p>
+
+    </footer>
+
+
+    <script>
+
+
+        const loginForm =
+            document.getElementById("loginForm");
+
+
+        const loginMessage =
+            document.getElementById("loginMessage");
+
+
+        const loginButton =
+            document.getElementById("loginButton");
+
+
+        loginForm.addEventListener(
+            "submit",
+            async function(event) {
+
+                event.preventDefault();
+
+
+                const username =
+                    document.getElementById(
+                        "username"
+                    ).value.trim();
+
+
+                const password =
+                    document.getElementById(
+                        "password"
+                    ).value;
+
+
+                if (!username || !password) {
+
+                    loginMessage.style.color =
+                        "#dc2626";
+
+                    loginMessage.innerText =
+                        "⚠️ Please enter username and password.";
+
+                    return;
+                }
+
+
+                loginButton.disabled = true;
+
+                loginButton.innerText =
+                    "🔄 Checking...";
+
+
+                loginMessage.style.color =
+                    "#64748b";
+
+                loginMessage.innerText =
+                    "Connecting to SmartCrop AI...";
+
+
+                try {
+
+
+                    const response =
+                        await fetch(
+                            "http://127.0.0.1:5000/api/login",
+                            {
+                                method: "POST",
+
+                                headers: {
+                                    "Content-Type":
+                                        "application/json"
+                                },
+
+                                body: JSON.stringify({
+
+                                    username:
+                                        username,
+
+                                    password:
+                                        password
+
+                                })
+                            }
+                        );
+
+
+                    const data =
+                        await response.json();
+
+
+                    console.log(
+                        "SmartCrop Login Response:",
+                        data
+                    );
+
+
+                    if (
+                        !response.ok ||
+                        data.status !== "success"
+                    ) {
+
+
+                        loginMessage.style.color =
+                            "#dc2626";
+
+
+                        loginMessage.innerText =
+                            "❌ " +
+                            (
+                                data.message ||
+                                "Invalid username or password."
+                            );
+
+
+                        loginButton.disabled =
+                            false;
+
+
+                        loginButton.innerText =
+                            "🔐 Login";
+
+
+                        return;
+
+                    }
+
+
+                    /*
+                     * LOGIN SUCCESS
+                     *
+                     * Save complete user object
+                     */
+
+                    localStorage.setItem(
+                        "smartcrop_user",
+                        JSON.stringify(data.user)
+                    );
+
+
+                    /*
+                     * Save role separately
+                     */
+
+                    localStorage.setItem(
+                        "smartcrop_role",
+                        data.user.role
+                    );
+
+
+                    /*
+                     * Save username
+                     */
+
+                    localStorage.setItem(
+                        "smartcrop_username",
+                        data.user.username
+                    );
+
+
+                    /*
+                     * Save user ID
+                     */
+
+                    localStorage.setItem(
+                        "smartcrop_user_id",
+                        data.user.id
+                    );
+
+
+                    loginMessage.style.color =
+                        "#15803d";
+
+
+                    loginMessage.innerText =
+                        "✅ Login successful!";
+
+
+                    loginButton.innerText =
+                        "✅ Logged In";
+
+
+                    /*
+                     * Redirect to homepage
+                     */
+
+                    setTimeout(function() {
+
+                        window.location.href =
+                            "index.html";
+
+                    }, 700);
+
+
+                }
+
+                catch (error) {
+
+
+                    console.error(
+                        "SmartCrop Login Error:",
+                        error
+                    );
+
+
+                    loginMessage.style.color =
+                        "#dc2626";
+
+
+                    loginMessage.innerText =
+                        "⚠️ Cannot connect to SmartCrop backend.";
+
+
+                    loginButton.disabled =
+                        false;
+
+
+                    loginButton.innerText =
+                        "🔐 Login";
+
+                }
+
+            }
+        );
+
+
+    </script>
+
+
+</body>
+
+</html>

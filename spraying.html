@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Targeted Spraying - SmartCrop AI</title>
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+
+        .spray-section {
+            width: 90%;
+            max-width: 1100px;
+            margin: 40px auto 80px;
+        }
+
+        .status-box {
+            max-width: 700px;
+            margin: 40px auto;
+        }
+
+        .loading {
+            color: #64748b;
+        }
+
+        .error {
+            color: #dc2626;
+        }
+
+        .spray-button {
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <nav>
+
+        <div class="logo">
+            🌱 SmartCrop AI
+        </div>
+
+        <div class="nav-links">
+
+            <a href="index.html">Home</a>
+            <a href="scanner.html">Crop Scanner</a>
+            <a href="iot.html">IoT Monitoring</a>
+            <a href="spraying.html">Spraying</a>
+            <a href="analytics.html">Analytics</a>
+            <a href="history.html">History</a>
+            <a href="farmer-copilot.html">Farmer Copilot</a>
+
+        </div>
+
+    </nav>
+
+
+    <section class="hero">
+
+        <h1>🎯 Targeted Spraying</h1>
+
+        <p>
+            Spray only the affected plants identified
+            by the SmartCrop AI system.
+        </p>
+
+    </section>
+
+
+    <section class="dashboard">
+
+        <div class="card">
+
+            <div class="icon">🌱</div>
+
+            <h2>Latest Plant</h2>
+
+            <h2 id="plantId">Loading...</h2>
+
+            <p>Latest detected plant</p>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="icon" id="healthIcon">🔍</div>
+
+            <h2>Plant Health</h2>
+
+            <h2 id="plantHealth">Loading...</h2>
+
+            <p>Latest AI detection result</p>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="icon">💧</div>
+
+            <h2>Spray Required</h2>
+
+            <h2 id="sprayRequired">Loading...</h2>
+
+            <p>AI-based spraying decision</p>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="icon">⚙️</div>
+
+            <h2>Pump Status</h2>
+
+            <h2 id="pumpStatus">⚪ OFF</h2>
+
+            <p id="pumpText">Pump currently OFF</p>
+
+        </div>
+
+    </section>
+
+
+    <section class="card status-box">
+
+        <h2>💦 Spray Operation</h2>
+
+        <p>
+            <b>Plant:</b>
+            <span id="detailPlant">Loading...</span>
+        </p>
+
+        <p>
+            <b>Condition:</b>
+            <span id="detailCondition">Loading...</span>
+        </p>
+
+        <p>
+            <b>AI Confidence:</b>
+            <span id="detailConfidence">Loading...</span>
+        </p>
+
+        <p>
+            <b>Spray Duration:</b>
+            5 Seconds
+        </p>
+
+        <p>
+            <b>Target:</b>
+            Affected Plant Only
+        </p>
+
+
+        <button
+            type="button"
+            class="button spray-button"
+            id="sprayButton"
+        >
+            🚜 Start Targeted Spray
+        </button>
+
+
+        <p id="sprayStatus">
+            Pump currently OFF
+        </p>
+
+    </section>
+
+
+    <script>
+
+        const plantId = document.getElementById("plantId");
+        const plantHealth = document.getElementById("plantHealth");
+        const sprayRequired = document.getElementById("sprayRequired");
+
+        const pumpStatus = document.getElementById("pumpStatus");
+        const pumpText = document.getElementById("pumpText");
+
+        const detailPlant = document.getElementById("detailPlant");
+        const detailCondition = document.getElementById("detailCondition");
+        const detailConfidence = document.getElementById("detailConfidence");
+
+        const healthIcon = document.getElementById("healthIcon");
+
+        const sprayButton = document.getElementById("sprayButton");
+        const sprayStatus = document.getElementById("sprayStatus");
+
+
+        let latestDetection = null;
+
+
+        async function loadLatestDetection() {
+
+            try {
+
+                const response = await fetch(
+                    "http://127.0.0.1:5000/api/detections"
+                );
+
+
+                const data = await response.json();
+
+
+                if (!response.ok || data.length === 0) {
+
+                    throw new Error(
+                        "No detection records found."
+                    );
+
+                }
+
+
+                latestDetection = data[0];
+
+
+                plantId.innerText =
+                    latestDetection.plant_id;
+
+                plantHealth.innerText =
+                    latestDetection.result;
+
+                sprayRequired.innerText =
+                    latestDetection.spray_required === "Yes"
+                        ? "YES"
+                        : "NO";
+
+
+                detailPlant.innerText =
+                    latestDetection.plant_id;
+
+                detailCondition.innerText =
+                    latestDetection.result;
+
+                detailConfidence.innerText =
+                    latestDetection.confidence + "%";
+
+
+                if (
+                    latestDetection.result === "Healthy"
+                ) {
+
+                    healthIcon.innerText = "🟢";
+
+                    sprayButton.disabled = true;
+
+                    sprayButton.style.opacity = "0.5";
+
+                    sprayStatus.innerText =
+                        "❌ Spraying not required for healthy plant.";
+
+                } else {
+
+                    healthIcon.innerText = "🔴";
+
+                    sprayButton.disabled = false;
+
+                    sprayButton.style.opacity = "1";
+
+                    sprayStatus.innerText =
+                        "Pump currently OFF";
+
+                }
+
+
+            } catch (error) {
+
+                console.error(error);
+
+                plantId.innerText = "Unavailable";
+                plantHealth.innerText = "Unavailable";
+                sprayRequired.innerText = "Unavailable";
+
+                detailPlant.innerText = "-";
+                detailCondition.innerText = "-";
+                detailConfidence.innerText = "-";
+
+                sprayStatus.innerHTML =
+                    `<span class="error">
+                        ⚠️ Unable to load latest detection.
+                    </span>`;
+
+            }
+
+        }
+
+
+        function startSpray() {
+
+            if (!latestDetection) {
+                return;
+            }
+
+
+            if (
+                latestDetection.spray_required !== "Yes"
+            ) {
+
+                sprayStatus.innerText =
+                    "❌ Spraying is not required.";
+
+                return;
+
+            }
+
+
+            pumpStatus.innerText = "🟢 ON";
+
+            pumpText.innerText =
+                "Targeted spraying in progress";
+
+            sprayStatus.innerText =
+                "🟢 Pump ON — Targeted spraying in progress...";
+
+
+            sprayButton.disabled = true;
+
+
+            setTimeout(function() {
+
+                pumpStatus.innerText = "⚪ OFF";
+
+                pumpText.innerText =
+                    "Pump currently OFF";
+
+                sprayStatus.innerText =
+                    "✅ Spraying completed — Pump OFF";
+
+                sprayButton.disabled = false;
+
+            }, 5000);
+
+        }
+
+
+        sprayButton.addEventListener(
+            "click",
+            startSpray
+        );
+
+
+        loadLatestDetection();
+
+    </script>
+
+</body>
+
+</html>

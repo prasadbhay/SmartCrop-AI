@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SmartCrop AI - User Management</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        .user-page {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .user-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .user-header h1 {
+            margin: 0;
+        }
+
+        .back-btn {
+            text-decoration: none;
+        }
+
+        .user-grid {
+            display: grid;
+            grid-template-columns: 380px 1fr;
+            gap: 25px;
+        }
+
+        .user-card {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 18px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .user-card h2 {
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 12px 14px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            font-size: 15px;
+        }
+
+        .create-btn {
+            width: 100%;
+            padding: 13px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            background: #168a45;
+            color: white;
+        }
+
+        .create-btn:hover {
+            opacity: 0.9;
+        }
+
+        .message {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 10px;
+            display: none;
+        }
+
+        .success {
+            background: #dff6e7;
+            color: #146c36;
+        }
+
+        .error {
+            background: #ffe0e0;
+            color: #a00000;
+        }
+
+        .users-table-wrapper {
+            overflow-x: auto;
+        }
+
+        .users-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .users-table th,
+        .users-table td {
+            padding: 13px 10px;
+            border-bottom: 1px solid rgba(128, 128, 128, 0.25);
+            text-align: left;
+        }
+
+        .users-table th {
+            font-weight: 700;
+        }
+
+        .role-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .admin-role {
+            background: #fff0c2;
+            color: #805900;
+        }
+
+        .user-role {
+            background: #dcecff;
+            color: #15579a;
+        }
+
+        .empty-users {
+            text-align: center;
+            padding: 25px;
+            opacity: 0.7;
+        }
+
+        @media (max-width: 800px) {
+
+            .user-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .user-page {
+                margin: 20px auto;
+            }
+        }
+    </style>
+</head>
+
+
+<body>
+
+    <div class="user-page">
+
+        <!-- HEADER -->
+
+        <div class="user-header">
+
+            <div>
+                <h1>👥 User Management</h1>
+                <p>Admin can create and view SmartCrop users.</p>
+            </div>
+
+            <a href="index.html" class="back-btn">
+                ← Back to Dashboard
+            </a>
+
+        </div>
+
+
+        <!-- MAIN GRID -->
+
+        <div class="user-grid">
+
+
+            <!-- CREATE USER -->
+
+            <div class="user-card">
+
+                <h2>➕ Create New User</h2>
+
+                <form id="createUserForm">
+
+                    <div class="form-group">
+
+                        <label for="name">
+                            Full Name
+                        </label>
+
+                        <input
+                            type="text"
+                            id="name"
+                            placeholder="Enter full name"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="username">
+                            Username
+                        </label>
+
+                        <input
+                            type="text"
+                            id="username"
+                            placeholder="Enter username"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="password">
+                            Password
+                        </label>
+
+                        <input
+                            type="password"
+                            id="password"
+                            placeholder="Enter password"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="role">
+                            User Role
+                        </label>
+
+                        <select id="role">
+
+                            <option value="user">
+                                👤 Farmer / User
+                            </option>
+
+                            <option value="admin">
+                                👑 Admin
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <button
+                        type="submit"
+                        class="create-btn"
+                    >
+                        ➕ Create User
+                    </button>
+
+                </form>
+
+
+                <div
+                    id="message"
+                    class="message"
+                ></div>
+
+            </div>
+
+
+
+            <!-- USER LIST -->
+
+            <div class="user-card">
+
+                <h2>📋 Registered Users</h2>
+
+                <div class="users-table-wrapper">
+
+                    <table class="users-table">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>ID</th>
+
+                                <th>Name</th>
+
+                                <th>Username</th>
+
+                                <th>Role</th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="usersTableBody">
+
+                            <tr>
+
+                                <td
+                                    colspan="4"
+                                    class="empty-users"
+                                >
+                                    Loading users...
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+<script>
+
+    const BACKEND_URL =
+        "http://127.0.0.1:5000";
+
+
+    // =====================================================
+    // LOGIN CHECK
+    // =====================================================
+
+    const storedUser =
+        localStorage.getItem("smartcrop_user");
+
+    const storedRole =
+        localStorage.getItem("smartcrop_role");
+
+    const storedUsername =
+        localStorage.getItem("smartcrop_username");
+
+
+    // User must be logged in
+
+    if (!storedUser) {
+
+        window.location.href =
+            "login.html";
+
+    }
+
+
+    // Only Admin can open this page
+
+    if (storedRole !== "admin") {
+
+        alert(
+            "Admin access required."
+        );
+
+        window.location.href =
+            "index.html";
+
+    }
+
+
+
+    // =====================================================
+    // MESSAGE
+    // =====================================================
+
+    function showMessage(
+        text,
+        type
+    ) {
+
+        const message =
+            document.getElementById(
+                "message"
+            );
+
+        message.textContent =
+            text;
+
+        message.className =
+            "message " + type;
+
+        message.style.display =
+            "block";
+
+    }
+
+
+
+    // =====================================================
+    // LOAD USERS
+    // =====================================================
+
+    async function loadUsers() {
+
+        const tableBody =
+            document.getElementById(
+                "usersTableBody"
+            );
+
+        try {
+
+            const response =
+                await fetch(
+                    BACKEND_URL +
+                    "/api/users?admin_username=" +
+                    encodeURIComponent(
+                        storedUsername
+                    )
+                );
+
+
+            const data =
+                await response.json();
+
+
+            if (
+                !response.ok ||
+                data.status !== "success"
+            ) {
+
+                throw new Error(
+                    data.message ||
+                    "Unable to load users."
+                );
+
+            }
+
+
+            tableBody.innerHTML = "";
+
+
+            if (
+                !data.users ||
+                data.users.length === 0
+            ) {
+
+                tableBody.innerHTML = `
+                    <tr>
+                        <td
+                            colspan="4"
+                            class="empty-users"
+                        >
+                            No users found.
+                        </td>
+                    </tr>
+                `;
+
+                return;
+
+            }
+
+
+            data.users.forEach(
+                user => {
+
+                    const row =
+                        document.createElement(
+                            "tr"
+                        );
+
+
+                    const roleClass =
+                        user.role === "admin"
+                            ? "admin-role"
+                            : "user-role";
+
+
+                    const roleText =
+                        user.role === "admin"
+                            ? "👑 Admin"
+                            : "👤 Farmer / User";
+
+
+                    row.innerHTML = `
+
+                        <td>
+                            ${user.id}
+                        </td>
+
+                        <td>
+                            ${user.name}
+                        </td>
+
+                        <td>
+                            ${user.username}
+                        </td>
+
+                        <td>
+                            <span
+                                class="role-badge ${roleClass}"
+                            >
+                                ${roleText}
+                            </span>
+                        </td>
+
+                    `;
+
+
+                    tableBody.appendChild(
+                        row
+                    );
+
+                }
+            );
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "Load users error:",
+                error
+            );
+
+            tableBody.innerHTML = `
+                <tr>
+                    <td
+                        colspan="4"
+                        class="empty-users"
+                    >
+                        Unable to load users.
+                    </td>
+                </tr>
+            `;
+
+        }
+
+    }
+
+
+
+    // =====================================================
+    // CREATE USER
+    // =====================================================
+
+    document
+        .getElementById("createUserForm")
+        .addEventListener(
+            "submit",
+            async function(event) {
+
+                event.preventDefault();
+
+
+                const name =
+                    document
+                        .getElementById("name")
+                        .value
+                        .trim();
+
+
+                const username =
+                    document
+                        .getElementById("username")
+                        .value
+                        .trim();
+
+
+                const password =
+                    document
+                        .getElementById("password")
+                        .value;
+
+
+                const role =
+                    document
+                        .getElementById("role")
+                        .value;
+
+
+                if (
+                    !name ||
+                    !username ||
+                    !password
+                ) {
+
+                    showMessage(
+                        "Please fill all fields.",
+                        "error"
+                    );
+
+                    return;
+
+                }
+
+
+                const button =
+                    document.querySelector(
+                        ".create-btn"
+                    );
+
+
+                button.disabled =
+                    true;
+
+                button.textContent =
+                    "Creating...";
+
+
+                try {
+
+                    const response =
+                        await fetch(
+                            BACKEND_URL +
+                            "/api/users/create",
+                            {
+
+                                method: "POST",
+
+                                headers: {
+                                    "Content-Type":
+                                        "application/json"
+                                },
+
+                                body:
+                                    JSON.stringify({
+
+                                        admin_username:
+                                            storedUsername,
+
+                                        name:
+                                            name,
+
+                                        username:
+                                            username,
+
+                                        password:
+                                            password,
+
+                                        role:
+                                            role
+
+                                    })
+
+                            }
+                        );
+
+
+                    const data =
+                        await response.json();
+
+
+                    if (
+                        !response.ok ||
+                        data.status !== "success"
+                    ) {
+
+                        throw new Error(
+                            data.message ||
+                            "Unable to create user."
+                        );
+
+                    }
+
+
+                    showMessage(
+                        "✅ " +
+                        data.message,
+                        "success"
+                    );
+
+
+                    // Clear form
+
+                    document
+                        .getElementById(
+                            "createUserForm"
+                        )
+                        .reset();
+
+
+                    // Reload users
+
+                    loadUsers();
+
+                }
+
+                catch (error) {
+
+                    console.error(
+                        "Create user error:",
+                        error
+                    );
+
+                    showMessage(
+                        "❌ " +
+                        error.message,
+                        "error"
+                    );
+
+                }
+
+                finally {
+
+                    button.disabled =
+                        false;
+
+                    button.textContent =
+                        "➕ Create User";
+
+                }
+
+            }
+        );
+
+
+
+    // =====================================================
+    // INITIAL LOAD
+    // =====================================================
+
+    loadUsers();
+
+</script>
+
+</body>
+
+</html>

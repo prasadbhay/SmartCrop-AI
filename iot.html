@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>IoT Monitoring - SmartCrop AI</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+
+        .iot-page {
+            width: 90%;
+            max-width: 1200px;
+            margin: 40px auto 80px;
+        }
+
+        .iot-status {
+            max-width: 1100px;
+            margin: 0 auto 25px;
+            padding: 16px 20px;
+            border-radius: 14px;
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            color: #166534;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .sensor-value {
+            font-size: 30px;
+            font-weight: bold;
+            margin: 12px 0;
+        }
+
+        .sensor-time {
+            font-size: 13px;
+            color: #64748b;
+        }
+
+        .machine-panel {
+            margin-top: 40px;
+            background: white;
+            border: 1px solid #dce9df;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 80, 30, 0.08);
+        }
+
+        .machine-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .machine-item {
+            padding: 18px;
+            border-radius: 14px;
+            background: #f8fff9;
+            border: 1px solid #e2e8f0;
+            text-align: center;
+        }
+
+        .machine-item h3 {
+            margin: 8px 0;
+        }
+
+        .machine-value {
+            font-weight: bold;
+            color: #166534;
+        }
+
+        @media (max-width: 900px) {
+
+            .machine-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+        }
+
+        @media (max-width: 600px) {
+
+            .machine-grid {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+    <nav>
+
+        <div class="logo">
+            🌱 SmartCrop AI
+        </div>
+
+        <div class="nav-links">
+
+            <a href="index.html">Home</a>
+            <a href="scanner.html">Crop Scanner</a>
+            <a href="iot.html">IoT Monitoring</a>
+            <a href="spraying.html">Spraying</a>
+            <a href="analytics.html">Analytics</a>
+            <a href="history.html">History</a>
+            <a href="farmer-copilot.html">Farmer Copilot</a>
+
+        </div>
+
+    </nav>
+
+
+    <section class="hero">
+
+        <h1>📡 IoT Monitoring</h1>
+
+        <p>
+            Monitor crop and machine conditions
+            through the SmartCrop IoT system.
+        </p>
+
+    </section>
+
+
+    <main class="iot-page">
+
+        <div class="iot-status" id="connectionStatus">
+
+            🟢 SmartCrop IoT System Online
+
+        </div>
+
+
+        <section class="dashboard">
+
+
+            <div class="card">
+
+                <div class="icon">🌡️</div>
+
+                <h2>Temperature</h2>
+
+                <div
+                    class="sensor-value"
+                    id="temperature"
+                >
+                    --
+                </div>
+
+                <p>Current field temperature</p>
+
+                <div
+                    class="sensor-time"
+                    id="temperatureTime"
+                >
+                    Waiting for data...
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="icon">💧</div>
+
+                <h2>Humidity</h2>
+
+                <div
+                    class="sensor-value"
+                    id="humidity"
+                >
+                    --
+                </div>
+
+                <p>Current air humidity</p>
+
+                <div
+                    class="sensor-time"
+                    id="humidityTime"
+                >
+                    Waiting for data...
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="icon">🌱</div>
+
+                <h2>Soil Moisture</h2>
+
+                <div
+                    class="sensor-value"
+                    id="soilMoisture"
+                >
+                    --
+                </div>
+
+                <p>Current soil moisture</p>
+
+                <div
+                    class="sensor-time"
+                    id="soilTime"
+                >
+                    Waiting for data...
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="icon">🚰</div>
+
+                <h2>Water Level</h2>
+
+                <div
+                    class="sensor-value"
+                    id="waterLevel"
+                >
+                    --
+                </div>
+
+                <p>Spraying tank level</p>
+
+                <div
+                    class="sensor-time"
+                    id="waterTime"
+                >
+                    Waiting for data...
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="icon">📡</div>
+
+                <h2>ESP32</h2>
+
+                <div
+                    class="sensor-value"
+                    id="espStatus"
+                >
+                    🟢 Online
+                </div>
+
+                <p>IoT controller status</p>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="icon">⚙️</div>
+
+                <h2>Spray Pump</h2>
+
+                <div
+                    class="sensor-value"
+                    id="pumpStatus"
+                >
+                    ⚪ OFF
+                </div>
+
+                <p>Current pump status</p>
+
+            </div>
+
+
+        </section>
+
+
+        <section class="machine-panel">
+
+            <h2>🤖 SmartCrop Machine Status</h2>
+
+            <p>
+                Live-style overview of the field scanning
+                and targeted spraying machine.
+            </p>
+
+
+            <div class="machine-grid">
+
+
+                <div class="machine-item">
+
+                    <div>📷</div>
+
+                    <h3>Camera</h3>
+
+                    <div
+                        class="machine-value"
+                        id="cameraStatus"
+                    >
+                        🟢 Active
+                    </div>
+
+                </div>
+
+
+                <div class="machine-item">
+
+                    <div>🚜</div>
+
+                    <h3>Motors</h3>
+
+                    <div
+                        class="machine-value"
+                        id="motorStatus"
+                    >
+                        🟢 Ready
+                    </div>
+
+                </div>
+
+
+                <div class="machine-item">
+
+                    <div>💦</div>
+
+                    <h3>Spray Pump</h3>
+
+                    <div
+                        class="machine-value"
+                        id="machinePump"
+                    >
+                        ⚪ Standby
+                    </div>
+
+                </div>
+
+
+                <div class="machine-item">
+
+                    <div>🌱</div>
+
+                    <h3>Current Crop</h3>
+
+                    <div
+                        class="machine-value"
+                        id="currentCrop"
+                    >
+                        Potato
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+        <section class="hero" style="margin-top:40px;">
+
+            <h2>⚙️ System Flow</h2>
+
+            <p>
+                Sensors → ESP32 → Raspberry Pi / Laptop →
+                AI Detection → Targeted Spraying →
+                SmartCrop Farmer Copilot
+            </p>
+
+        </section>
+
+    </main>
+
+
+    <script>
+
+        /*
+            DEMO SENSOR DATA
+
+            Later, real ESP32 values will come
+            through the backend API.
+        */
+
+
+        let sensorData = {
+
+            temperature: 29,
+
+            humidity: 64,
+
+            soilMoisture: 68,
+
+            waterLevel: 82,
+
+            esp32: true,
+
+            pump: false
+
+        };
+
+
+        function updateSensorDisplay() {
+
+            document.getElementById(
+                "temperature"
+            ).innerText =
+                sensorData.temperature + "°C";
+
+
+            document.getElementById(
+                "humidity"
+            ).innerText =
+                sensorData.humidity + "%";
+
+
+            document.getElementById(
+                "soilMoisture"
+            ).innerText =
+                sensorData.soilMoisture + "%";
+
+
+            document.getElementById(
+                "waterLevel"
+            ).innerText =
+                sensorData.waterLevel + "%";
+
+
+            document.getElementById(
+                "espStatus"
+            ).innerText =
+                sensorData.esp32
+                    ? "🟢 Online"
+                    : "🔴 Offline";
+
+
+            document.getElementById(
+                "pumpStatus"
+            ).innerText =
+                sensorData.pump
+                    ? "🟢 ON"
+                    : "⚪ OFF";
+
+
+            document.getElementById(
+                "machinePump"
+            ).innerText =
+                sensorData.pump
+                    ? "🟢 Spraying"
+                    : "⚪ Standby";
+
+
+            const now =
+                new Date().toLocaleTimeString();
+
+
+            document.getElementById(
+                "temperatureTime"
+            ).innerText =
+                "Updated " + now;
+
+
+            document.getElementById(
+                "humidityTime"
+            ).innerText =
+                "Updated " + now;
+
+
+            document.getElementById(
+                "soilTime"
+            ).innerText =
+                "Updated " + now;
+
+
+            document.getElementById(
+                "waterTime"
+            ).innerText =
+                "Updated " + now;
+
+        }
+
+
+        /*
+            Small demo variation every 5 seconds.
+            This gives the page a live-monitoring feel.
+        */
+
+        function simulateSensorUpdate() {
+
+            sensorData.temperature =
+                29 + Math.floor(Math.random() * 3);
+
+            sensorData.humidity =
+                62 + Math.floor(Math.random() * 5);
+
+            sensorData.soilMoisture =
+                65 + Math.floor(Math.random() * 8);
+
+            sensorData.waterLevel =
+                78 + Math.floor(Math.random() * 7);
+
+
+            updateSensorDisplay();
+
+        }
+
+
+        updateSensorDisplay();
+
+        setInterval(
+            simulateSensorUpdate,
+            5000
+        );
+
+    </script>
+
+
+</body>
+
+</html>

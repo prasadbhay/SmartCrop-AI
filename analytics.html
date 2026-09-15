@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Analytics - SmartCrop AI</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+
+        .analytics-page {
+            width: 90%;
+            max-width: 1200px;
+            margin: 40px auto 80px;
+        }
+
+        .analytics-note {
+            text-align: center;
+            color: #64748b;
+            margin-bottom: 25px;
+        }
+
+        .bar-section {
+            max-width: 850px;
+            margin: 40px auto;
+        }
+
+        .bar-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .bar-bg {
+            width: 100%;
+            height: 28px;
+            background: #e2e8f0;
+            border-radius: 20px;
+            overflow: hidden;
+            margin-bottom: 25px;
+        }
+
+        .bar {
+            height: 100%;
+            width: 0%;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 10px;
+            color: white;
+            font-weight: bold;
+            transition: width 0.8s ease;
+            box-sizing: border-box;
+        }
+
+        .healthy-bar {
+            background: #16a34a;
+        }
+
+        .diseased-bar {
+            background: #dc2626;
+        }
+
+        .spray-bar {
+            background: #0284c7;
+        }
+
+        .status-message {
+            text-align: center;
+            margin: 20px 0;
+            color: #64748b;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+    <nav>
+
+        <div class="logo">
+            🌱 SmartCrop AI
+        </div>
+
+        <div class="nav-links">
+
+            <a href="index.html">Home</a>
+
+            <a href="scanner.html">Crop Scanner</a>
+
+            <a href="iot.html">IoT Monitoring</a>
+
+            <a href="spraying.html">Spraying</a>
+
+            <a href="analytics.html">Analytics</a>
+
+            <a href="history.html">History</a>
+
+            <a href="farmer-copilot.html">Farmer Copilot</a>
+
+        </div>
+
+    </nav>
+
+
+    <section class="hero">
+
+        <h1>📊 Crop Health Analytics</h1>
+
+        <p>
+            Live overview of crop scanning,
+            health detection and targeted spraying.
+        </p>
+
+    </section>
+
+
+    <main class="analytics-page">
+
+        <p
+            class="analytics-note"
+            id="analyticsStatus"
+        >
+            Loading live analytics...
+        </p>
+
+
+        <!-- Analytics Cards -->
+
+        <section class="dashboard">
+
+
+            <div class="card">
+
+                <div class="icon">🌱</div>
+
+                <h2>Total Scanned</h2>
+
+                <h2 id="totalScanned">--</h2>
+
+                <p>Plants analyzed by AI</p>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="icon">✅</div>
+
+                <h2>Healthy</h2>
+
+                <h2 id="healthyCount">--</h2>
+
+                <p id="healthyPercent">
+                    --% of scanned plants
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="icon">🔴</div>
+
+                <h2>Diseased</h2>
+
+                <h2 id="diseasedCount">--</h2>
+
+                <p id="diseasedPercent">
+                    --% of scanned plants
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="icon">💧</div>
+
+                <h2>Spray Operations</h2>
+
+                <h2 id="sprayCount">--</h2>
+
+                <p>
+                    Targeted spray records
+                </p>
+
+            </div>
+
+
+        </section>
+
+
+        <!-- Health Overview -->
+
+        <section
+            class="card bar-section"
+        >
+
+            <h2>
+                🌾 Crop Health Overview
+            </h2>
+
+
+            <div class="bar-label">
+
+                <span>
+                    Healthy Plants
+                </span>
+
+                <span id="healthyBarText">
+                    0%
+                </span>
+
+            </div>
+
+
+            <div class="bar-bg">
+
+                <div
+                    class="bar healthy-bar"
+                    id="healthyBar"
+                >
+                    0%
+                </div>
+
+            </div>
+
+
+            <div class="bar-label">
+
+                <span>
+                    Diseased / Defected Plants
+                </span>
+
+                <span id="diseasedBarText">
+                    0%
+                </span>
+
+            </div>
+
+
+            <div class="bar-bg">
+
+                <div
+                    class="bar diseased-bar"
+                    id="diseasedBar"
+                >
+                    0%
+                </div>
+
+            </div>
+
+
+            <div class="bar-label">
+
+                <span>
+                    Targeted Spray Operations
+                </span>
+
+                <span id="sprayBarText">
+                    0%
+                </span>
+
+            </div>
+
+
+            <div class="bar-bg">
+
+                <div
+                    class="bar spray-bar"
+                    id="sprayBar"
+                >
+                    0%
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- System Performance -->
+
+        <section class="hero">
+
+            <h2>
+                🎯 System Performance
+            </h2>
+
+            <p id="performanceText">
+
+                SmartCrop AI is analyzing your
+                crop detection records.
+
+            </p>
+
+        </section>
+
+    </main>
+
+
+    <script>
+
+        async function loadAnalytics() {
+
+            const status =
+                document.getElementById(
+                    "analyticsStatus"
+                );
+
+
+            try {
+
+                const response = await fetch(
+                    "http://127.0.0.1:5000/api/dashboard"
+                );
+
+
+                const data =
+                    await response.json();
+
+
+                if (
+                    !response.ok
+                ) {
+
+                    throw new Error(
+                        "Unable to load dashboard data"
+                    );
+
+                }
+
+
+                const total =
+                    Number(data.total_scanned) || 0;
+
+                const healthy =
+                    Number(data.healthy) || 0;
+
+                const diseased =
+                    Number(data.diseased) || 0;
+
+                const spray =
+                    Number(data.spray_operations) || 0;
+
+
+                let healthyPercent = 0;
+                let diseasedPercent = 0;
+                let sprayPercent = 0;
+
+
+                if (total > 0) {
+
+                    healthyPercent =
+                        (healthy / total) * 100;
+
+                    diseasedPercent =
+                        (diseased / total) * 100;
+
+                    sprayPercent =
+                        (spray / total) * 100;
+
+                }
+
+
+                healthyPercent =
+                    Math.round(
+                        healthyPercent * 10
+                    ) / 10;
+
+
+                diseasedPercent =
+                    Math.round(
+                        diseasedPercent * 10
+                    ) / 10;
+
+
+                sprayPercent =
+                    Math.min(
+                        Math.round(
+                            sprayPercent * 10
+                        ) / 10,
+                        100
+                    );
+
+
+                // Cards
+
+                document.getElementById(
+                    "totalScanned"
+                ).innerText = total;
+
+
+                document.getElementById(
+                    "healthyCount"
+                ).innerText = healthy;
+
+
+                document.getElementById(
+                    "diseasedCount"
+                ).innerText = diseased;
+
+
+                document.getElementById(
+                    "sprayCount"
+                ).innerText = spray;
+
+
+                document.getElementById(
+                    "healthyPercent"
+                ).innerText =
+                    healthyPercent +
+                    "% of scanned plants";
+
+
+                document.getElementById(
+                    "diseasedPercent"
+                ).innerText =
+                    diseasedPercent +
+                    "% of scanned plants";
+
+
+                // Healthy bar
+
+                document.getElementById(
+                    "healthyBar"
+                ).style.width =
+                    healthyPercent + "%";
+
+
+                document.getElementById(
+                    "healthyBar"
+                ).innerText =
+                    healthyPercent + "%";
+
+
+                document.getElementById(
+                    "healthyBarText"
+                ).innerText =
+                    healthyPercent + "%";
+
+
+                // Diseased bar
+
+                document.getElementById(
+                    "diseasedBar"
+                ).style.width =
+                    diseasedPercent + "%";
+
+
+                document.getElementById(
+                    "diseasedBar"
+                ).innerText =
+                    diseasedPercent + "%";
+
+
+                document.getElementById(
+                    "diseasedBarText"
+                ).innerText =
+                    diseasedPercent + "%";
+
+
+                // Spray bar
+
+                document.getElementById(
+                    "sprayBar"
+                ).style.width =
+                    sprayPercent + "%";
+
+
+                document.getElementById(
+                    "sprayBar"
+                ).innerText =
+                    sprayPercent + "%";
+
+
+                document.getElementById(
+                    "sprayBarText"
+                ).innerText =
+                    sprayPercent + "%";
+
+
+                // System performance text
+
+                if (total === 0) {
+
+                    document.getElementById(
+                        "performanceText"
+                    ).innerText =
+                        "No crop scans have been recorded yet.";
+
+                } else {
+
+                    document.getElementById(
+                        "performanceText"
+                    ).innerText =
+                        "SmartCrop AI has analyzed " +
+                        total +
+                        " plants. " +
+                        healthy +
+                        " were healthy and " +
+                        diseased +
+                        " were detected as diseased / defected. " +
+                        spray +
+                        " targeted spray operation records are available.";
+
+                }
+
+
+                status.innerText =
+                    "🟢 Live data loaded from SmartCrop database";
+
+
+            } catch (error) {
+
+                console.error(
+                    "Analytics error:",
+                    error
+                );
+
+
+                status.innerText =
+                    "🔴 Unable to connect to SmartCrop backend";
+
+            }
+
+        }
+
+
+        loadAnalytics();
+
+
+        // Refresh analytics every 5 seconds
+
+        setInterval(
+            loadAnalytics,
+            5000
+        );
+
+    </script>
+
+
+</body>
+
+</html>
