@@ -6,7 +6,7 @@ import tempfile
 
 from ultralytics import YOLO
 
-from backend.auth import (
+from .auth import (
     login_user,
     create_users_table,
     create_default_users,
