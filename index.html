@@ -3,16 +3,9 @@
 
 <head>
 
-    <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
     <title>SmartCrop AI</title>
 
-    <link rel="stylesheet"
-          href="style.css">
-
+    <link rel="stylesheet" href="style.css">
 
     <style>
 
@@ -169,84 +162,6 @@
         }
 
 
-        /* ================================
-           USER INFO
-        ================================= */
-
-        .user-panel {
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            gap: 12px;
-            padding: 10px 5%;
-            background: #f8fff9;
-            border-bottom: 1px solid #dce9df;
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: #14532d;
-            font-size: 14px;
-        }
-
-        .user-avatar {
-            width: 38px;
-            height: 38px;
-            border-radius: 50%;
-            background: #dcfce7;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-        }
-
-        .user-name {
-            font-weight: bold;
-        }
-
-        .user-role {
-            color: #64748b;
-            font-size: 12px;
-        }
-
-        .logout-button {
-            border: none;
-            padding: 9px 15px;
-            border-radius: 10px;
-            background: #fee2e2;
-            color: #b91c1c;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .logout-button:hover {
-            background: #fecaca;
-        }
-
-
-        /* ================================
-           ADMIN USER MANAGEMENT BUTTON
-        ================================= */
-
-        .admin-users-button {
-            display: none;
-            padding: 9px 15px;
-            border-radius: 10px;
-            background: #fff7d6;
-            color: #805900;
-            border: 1px solid #f3d36a;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 14px;
-        }
-
-        .admin-users-button:hover {
-            background: #ffefb0;
-        }
-
-
         @media (max-width: 900px) {
 
             .quick-cards {
@@ -259,11 +174,6 @@
 
             .home-content h1 {
                 font-size: 42px;
-            }
-
-            .user-panel {
-                justify-content: center;
-                flex-wrap: wrap;
             }
 
         }
@@ -294,7 +204,6 @@
         <div class="logo">
             🌱 SmartCrop AI
         </div>
-
 
         <div class="nav-links">
 
@@ -331,63 +240,6 @@
     </nav>
 
 
-    <!-- ================================
-         LOGGED-IN USER PANEL
-    ================================= -->
-
-    <div class="user-panel">
-
-
-        <div class="user-info">
-
-            <div class="user-avatar"
-                 id="userAvatar">
-                👤
-            </div>
-
-
-            <div>
-
-                <div
-                    class="user-name"
-                    id="userName"
-                >
-                    Loading...
-                </div>
-
-
-                <div
-                    class="user-role"
-                    id="userRole"
-                >
-                    Checking account...
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <!-- ADMIN ONLY -->
-
-        <a
-            href="admin-users.html"
-            id="adminUsersLink"
-            class="admin-users-button"
-        >
-            👥 User Management
-        </a>
-
-
-        <button
-            class="logout-button"
-            onclick="logoutUser()"
-        >
-            🚪 Logout
-        </button>
-
-    </div>
-
 
     <!-- ================================
          HERO SECTION
@@ -397,22 +249,18 @@
 
         <div class="home-content">
 
-
             <div class="home-badge">
                 🌱 AI + IoT Smart Agriculture
             </div>
-
 
             <h1>
                 SmartCrop AI
             </h1>
 
-
             <h2>
                 Intelligent Crop Health Detection
                 & Targeted Spraying
             </h2>
-
 
             <p>
                 A smart agriculture system that combines
@@ -431,7 +279,6 @@
                     📷 Scan Crop
                 </a>
 
-
                 <a
                     href="farmer-copilot.html"
                     class="secondary-button"
@@ -446,12 +293,12 @@
     </section>
 
 
+
     <!-- ================================
          SMART AGRICULTURE TOOLS
     ================================= -->
 
     <section class="quick-section">
-
 
         <div class="section-title">
 
@@ -497,6 +344,7 @@
             </div>
 
 
+
             <!-- IoT -->
 
             <div class="quick-card">
@@ -522,6 +370,7 @@
                 </a>
 
             </div>
+
 
 
             <!-- Spraying -->
@@ -556,12 +405,12 @@
     </section>
 
 
+
     <!-- ================================
          LIVE SUMMARY
     ================================= -->
 
     <section class="status-panel">
-
 
         <div class="section-title">
 
@@ -596,6 +445,7 @@
             </div>
 
 
+
             <div class="status-item">
 
                 <div>
@@ -613,6 +463,7 @@
             </div>
 
 
+
             <div class="status-item">
 
                 <div>
@@ -628,6 +479,7 @@
                 </p>
 
             </div>
+
 
 
             <div class="status-item">
@@ -652,6 +504,7 @@
     </section>
 
 
+
     <!-- ================================
          FOOTER
     ================================= -->
@@ -664,7 +517,6 @@
         border-top: 1px solid #dce9df;
         box-shadow: 0 -3px 15px rgba(0, 80, 30, 0.06);
     ">
-
 
         <p style="
             margin: 0;
@@ -716,208 +568,12 @@
     </footer>
 
 
+
     <!-- ================================
          JAVASCRIPT
     ================================= -->
 
     <script>
-
-
-        /* =================================
-           CHECK LOGIN
-        ================================= */
-
-        function checkLogin() {
-
-            const savedUser =
-                localStorage.getItem(
-                    "smartcrop_user"
-                );
-
-
-            if (!savedUser) {
-
-                window.location.href =
-                    "login.html";
-
-                return null;
-
-            }
-
-
-            try {
-
-                const user =
-                    JSON.parse(savedUser);
-
-                return user;
-
-            }
-
-            catch (error) {
-
-                console.error(
-                    "Invalid user session",
-                    error
-                );
-
-
-                localStorage.removeItem(
-                    "smartcrop_user"
-                );
-
-                localStorage.removeItem(
-                    "smartcrop_role"
-                );
-
-                localStorage.removeItem(
-                    "smartcrop_username"
-                );
-
-                localStorage.removeItem(
-                    "smartcrop_user_id"
-                );
-
-
-                window.location.href =
-                    "login.html";
-
-                return null;
-
-            }
-
-        }
-
-
-        /* =================================
-           DISPLAY USER
-        ================================= */
-
-        function displayUser() {
-
-            const user =
-                checkLogin();
-
-
-            if (!user) {
-                return;
-            }
-
-
-            const userName =
-                document.getElementById(
-                    "userName"
-                );
-
-
-            const userRole =
-                document.getElementById(
-                    "userRole"
-                );
-
-
-            const userAvatar =
-                document.getElementById(
-                    "userAvatar"
-                );
-
-
-            const adminUsersLink =
-                document.getElementById(
-                    "adminUsersLink"
-                );
-
-
-            userName.innerText =
-                user.name ||
-                user.username;
-
-
-            if (user.role === "admin") {
-
-                userRole.innerText =
-                    "👑 Administrator";
-
-                userAvatar.innerText =
-                    "👑";
-
-
-                /* =========================
-                   SHOW ADMIN USER MANAGEMENT
-                ========================= */
-
-                if (adminUsersLink) {
-
-                    adminUsersLink.style.display =
-                        "inline-block";
-
-                }
-
-            }
-
-            else {
-
-                userRole.innerText =
-                    "👨‍🌾 Farmer";
-
-                userAvatar.innerText =
-                    "👨‍🌾";
-
-
-                /* =========================
-                   KEEP ADMIN LINK HIDDEN
-                ========================= */
-
-                if (adminUsersLink) {
-
-                    adminUsersLink.style.display =
-                        "none";
-
-                }
-
-            }
-
-        }
-
-
-        /* =================================
-           LOGOUT
-        ================================= */
-
-        function logoutUser() {
-
-            const confirmLogout =
-                confirm(
-                    "Are you sure you want to logout?"
-                );
-
-
-            if (!confirmLogout) {
-                return;
-            }
-
-
-            localStorage.removeItem(
-                "smartcrop_user"
-            );
-
-            localStorage.removeItem(
-                "smartcrop_role"
-            );
-
-            localStorage.removeItem(
-                "smartcrop_username"
-            );
-
-            localStorage.removeItem(
-                "smartcrop_user_id"
-            );
-
-
-            window.location.href =
-                "login.html";
-
-        }
 
 
         /* =================================
@@ -1018,11 +674,10 @@
         }
 
 
+
         /* =================================
            START PAGE
         ================================= */
-
-        displayUser();
 
         loadSummary();
 
